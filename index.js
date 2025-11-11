@@ -49,6 +49,12 @@ async function run() {
             }
         })
 
+        app.get('/latest-listings', async (req, res) => {
+            const cursor = pawmartCollection.find().sort({_id: -1}).limit(6);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
