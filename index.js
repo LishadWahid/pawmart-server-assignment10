@@ -29,6 +29,7 @@ async function run() {
         const db = client.db('pawmart-server')
         const pawmartCollection = db.collection('listings')
         const categoryCollection = db.collection('category_filtered_products')
+        const petSupplyCollection = db.collection('listings')
 
         app.get('/listings', async (req, res) => {
             const result = await pawmartCollection.find().toArray()
@@ -63,7 +64,11 @@ async function run() {
             res.send(result);
         })
 
-
+       app.get('/pet-listings', async (req, res) => {
+           const petSupply = await petSupplyCollection.find().toArray();
+           console.log(petSupply);
+           res.send(petSupply);
+       }) 
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
