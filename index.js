@@ -47,11 +47,13 @@ async function run() {
             }
         })
 
-        app.get('/orders', async(req, res) => {
-            const email =req.body.email;
+        app.get('/orders', async (req, res) => {
+            const email = req.query.email;
             const query = email ? { email } : {};
-            res.send(await db.collection('orders').find(query).toArray());
-        })
+            const result = await db.collection('orders').find(query).toArray();
+            res.send(result);
+        });
+
 
         app.post('/orders', async (req, res) => {
             const newOrder = req.body;
