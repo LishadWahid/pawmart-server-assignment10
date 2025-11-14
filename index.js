@@ -74,6 +74,30 @@ async function run() {
             res.send(await db.collection('listings').deleteOne({ _id: new ObjectId(req.params.id) }));
         })
 
+        app.get('/my-listings', async (req, res) => {
+            const email = req.query.email;
+
+            if (!email) {
+                return res.status(400).send({ message: "Email is required" });
+            }
+
+            const query = { email: email };
+            const result = await db.collection('listings').find(query).toArray();
+            res.send(result);
+        });
+
+        app.put('/listings/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedData = req.body;
+
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = { $set: updatedData };
+
+            const result = await db.collection('listings').updateOne(filter, updateDoc);
+            res.send(result);
+        });
+
+
         app.get('/listings', async (req, res) => {
             const result = await pawmartCollection.find().toArray()
             console.log(result)
@@ -123,7 +147,7 @@ async function run() {
         // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
-        
+
         // await client.close();
     }
 }
